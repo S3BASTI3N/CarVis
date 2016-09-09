@@ -102,6 +102,7 @@ function renderVisualisation(svg, data) {
         .attr("dy", yMap)
         .text(function(d){return d.model})
         .style("opacity", 0)
+        .style("text-anchor","middle")
         .on("mouseover", function(d) {
             d3.select(this)
                 .transition()
@@ -114,19 +115,6 @@ function renderVisualisation(svg, data) {
                 .duration(500)
                 .style("opacity", "0");
         });
-
-
-    /*
-    // draw dots
-    svg.selectAll(".dot")
-        .data(data)
-        .enter().append("circle")
-        .attr("class", "dot")
-        .attr("r", 3.5)
-        .attr("cx", xMap)
-        .attr("cy", yMap)
-        .style("fill", function(d) { return color(cValue(d));})
-    */
 
     // x-axis
     svg.append("g")
