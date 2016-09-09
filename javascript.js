@@ -35,12 +35,6 @@ var svg = d3.select("body").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// add the tooltip area to the webpage
-var tooltip = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
-
-
 function loadVisualisation()
 {
     readDataFile("cars.csv");
@@ -91,6 +85,38 @@ function renderVisualisation(svg, data) {
     xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
     yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
 
+    var container = svg.selectAll(".dot")
+        .data(data)
+        .enter().append("g")
+
+    container.append("circle")
+        .attr("class", "dot")
+        .attr("r", 3.5)
+        .attr("cx", xMap)
+        .attr("cy", yMap)
+        .style("fill", function(d) { return color(cValue(d));})
+
+    container.append("text")
+        .attr("font-family", "sans-serif")
+        .attr("dx", xMap)
+        .attr("dy", yMap)
+        .text(function(d){return d.model})
+        .style("opacity", 0)
+        .on("mouseover", function(d) {
+            d3.select(this)
+                .transition()
+                .duration(1000)
+                .style("opacity", "100");
+        })
+        .on("mouseout", function(d) {
+            d3.select(this)
+                .transition()
+                .duration(500)
+                .style("opacity", "0");
+        });
+
+
+    /*
     // draw dots
     svg.selectAll(".dot")
         .data(data)
@@ -100,20 +126,7 @@ function renderVisualisation(svg, data) {
         .attr("cx", xMap)
         .attr("cy", yMap)
         .style("fill", function(d) { return color(cValue(d));})
-        .on("mouseover", function(d) {
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", .9);
-            tooltip.html(d["Cereal Name"] + "<br/> (" + xValue(d)
-                + ", " + yValue(d) + ")")
-                .style("left", (d3.event.pageX + 5) + "px")
-                .style("top", (d3.event.pageY - 28) + "px");
-        })
-        .on("mouseout", function(d) {
-            tooltip.transition()
-                .duration(500)
-                .style("opacity", 0);
-        });
+    */
 
     // x-axis
     svg.append("g")
