@@ -139,37 +139,28 @@ function renderVisualisation(svg, data) {
         .style("fill", function(d) { return color(quantize(cValue(d)));})
         .style("opacity", function(d) { return d.origin === "Japan" ? 1 : 0 });
 
+    // Model and amount of cylinders
     container.append("text")
-        .attr("font-family", "sans-serif")
+        .attr("font-family", "Roboto")
         .attr("y", "20")
         .attr("dx", "30")
         .text(function(d){return "Model (Cylinders): " + d.model + " ("+d.cylinders+")"})
         .style("opacity", 0)
-        .style("font-size", "2em");
+        .style("font-size", "30px")
+        .style("font-weight", "bold");
 
-    // x-axis
+    // x-axis (time)
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
+        .style("font-size", "15px")
         .call(xAxis)
-        .append("text")
-        .attr("class", "label")
-        .attr("x", width)
-        .attr("y", -6)
-        .style("text-anchor", "end")
-        .text("Calories");
 
-    // y-axis
+    // y-axis (MPG)
     svg.append("g")
         .attr("class", "y axis")
-        .call(yAxis)
-        .append("text")
-        .attr("class", "label")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text("Protein (g)");
+        .style("font-size", "15px")
+        .call(yAxis);
 
     // X axis label
     svg.append("text")
@@ -177,8 +168,7 @@ function renderVisualisation(svg, data) {
         .attr("text-anchor", "end")
         .attr("x", width)
         .attr("y", height - 6)
-        .text("Time (Year+1900)")
-    ;
+        .text("Time (Year+1900)");
 
     // Y axis label
     svg.append("text")
@@ -190,7 +180,7 @@ function renderVisualisation(svg, data) {
         .text("MPG")
         .attr("font-family", "sans-serif");
 
-    console.log(quantize.ticks());
+
     // draw legend
     var legend = svg.selectAll(".legend")
         .data(quantize.ticks(5))
