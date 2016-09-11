@@ -25,8 +25,13 @@ var yValue = function(d) { return d.MPG;}, // data -> value
     yAxis = d3.axisLeft().scale(yScale);
 
 // setup fill color
-var cValue = function(d) { return d.origin;},
-    color = d3.scaleOrdinal(d3.schemeCategory10);
+var cValue = function(d) { return d.horsepower; };
+//var color = d3.scaleOrdinal(d3.schemeCategory10);
+var quantize = d3.scaleQuantize()
+    .domain([0, 230])
+    .range([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]); // possibly adjust range to a smaller one
+
+var color = d3.scaleSequential(d3.interpolateViridis);
 
 // add the graph canvas to the body of the webpage
 var svg = d3.select("body").append("svg")
@@ -86,6 +91,7 @@ function renderVisualisation(svg, data) {
     yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
 
     var maxWeight = d3.max(data,function(d) {return d.weight;})
+    var maxHorsePower = d3.max(data, function(d) {return d.horsepower});
 
     var container = svg.selectAll(".dot")
         .data(data)
@@ -96,7 +102,7 @@ function renderVisualisation(svg, data) {
         .attr("r", function(d) { return d.weight / maxWeight * 7;})
         .attr("cx", xMap)
         .attr("cy", yMap)
-        .style("fill", function(d) { return color(cValue(d));})
+        .style("fill", function(d) { return color(quantize(cValue(d)));})
 
     container.append("text")
         .attr("font-family", "sans-serif")
@@ -163,7 +169,7 @@ function renderVisualisation(svg, data) {
 
     // draw legend
     var legend = svg.selectAll(".legend")
-        .data(color.domain())
+        .data(quantize.ticks())
         .enter().append("g")
         .attr("class", "legend")
         .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
@@ -173,7 +179,7 @@ function renderVisualisation(svg, data) {
         .attr("x", width - 18)
         .attr("width", 18)
         .attr("height", 18)
-        .style("fill", color);
+        .style("fill", function(d) {return color(quantize(d))});
 
     // draw legend text
     legend.append("text")
