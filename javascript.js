@@ -72,7 +72,7 @@ function appendSvg()
 {
     // add the graph canvas to the body of the webpage
     var svg = d3.select("body").append("svg")
-        .attr("width", width + margin.left + margin.right)
+        .attr("width", width + margin.left + margin.right + 75  )
         .attr("height", height + margin.top + margin.bottom + 50)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -86,7 +86,6 @@ function renderVisualisation(svg, data) {
     yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
 
     var maxWeight = d3.max(data,function(d) {return d.weight;})
-    var maxHorsePower = d3.max(data, function(d) {return d.horsepower});
 
     var container = svg.selectAll(".dot")
         .data(data)
@@ -205,4 +204,48 @@ function renderVisualisation(svg, data) {
         .style("text-anchor", "end")
         .text(function(d) { return d + "-" + (d+49) + " HP";})
         .attr("font-family", "sans-serif");
+
+    // draw legend shapes
+    var shapeContainer = svg.append("g")
+        .attr("transform", "translate(" + (width+30) +")");
+
+    // Europe Symbol
+    shapeContainer.append("circle")
+        .attr("class", "dot")
+        .attr("r", symbolScale*0.8)
+        .attr("transform", "translate(0," + symbolScale*0.8 + ")")
+        .style("fill", function(d) { return color(quantize(0));})
+        .style("opacity", 1);
+    shapeContainer.append("text")
+        .attr("class", "text")
+        .attr("transform", "translate(" + (symbolScale +10)+  "," + (symbolScale+3) + ")")
+        .text("Europe")
+
+    // US Symbol
+    shapeContainer.append("rect")
+        .attr("class", "rect")
+        .attr("width", 1.9 * symbolScale)
+        .attr("height", 1.9 * symbolScale)
+        .attr("x", - symbolScale)
+        .attr("y", "0.5em")
+        .attr("transform", "translate(0," + 1.2*symbolScale + ")")
+        .style("fill", function(d) { return color(quantize(0));})
+        .style("opacity", 1);
+    shapeContainer.append("text")
+        .attr("class", "text")
+        .attr("transform", "translate(" + (symbolScale +10)+  "," + (3.5*symbolScale) + ")")
+        .text("US");
+
+    // Japan Symbol
+    shapeContainer.append("polygon")
+        .attr("class", "polygon")
+        .attr("points", "1,1 0,-1 -1,1")
+        .attr("transform", "translate(0," + 5*symbolScale + ") scale("+symbolScale*0.9+")")
+        .style("fill", function(d) { return color(quantize(0));})
+        .style("opacity", 1);
+    shapeContainer.append("text")
+        .attr("class", "text")
+        .attr("transform", "translate(" + (symbolScale +10) +"," + 5.8*symbolScale + ")")
+        .text("Japan")
+
 }
