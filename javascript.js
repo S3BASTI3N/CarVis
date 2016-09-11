@@ -95,9 +95,21 @@ function renderVisualisation(svg, data) {
 
     var container = svg.selectAll(".dot")
         .data(data)
-        .enter().append("g");
+        .enter().append("g")
+        .on("mouseover", function(d) {
+            d3.select(this).select("text")
+                .transition()
+                .duration(700)
+                .style("opacity", "100");
+        })
+        .on("mouseout", function(d) {
+            d3.select(this).select("text")
+                .transition()
+                .duration(500)
+                .style("opacity", "0");
+        });
 
-    // Europe
+    // Europe symbol
     container.append("circle")
         .attr("class", "dot")
         .attr("r", function(d) { return d.weight / maxWeight * symbolScale;})
@@ -107,7 +119,7 @@ function renderVisualisation(svg, data) {
         .style("opacity", function(d) { return d.origin === "Europe" ? 1 : 0 });
 
 
-    // US
+    // US symbol
     container.append("rect")
         .attr("class", "rect")
         .attr("width", function(d) { return d.weight / maxWeight * 2 * symbolScale;})
@@ -117,7 +129,7 @@ function renderVisualisation(svg, data) {
         .style("fill", function(d) { return color(quantize(cValue(d)));})
         .style("opacity", function(d) { return d.origin === "US" ? 1 : 0 });
 
-    // Japan
+    // Japan symbol
     container.append("polygon")
         .attr("class", "polygon")
         .attr("points", "1,1 0,-1 -1,1")
@@ -129,23 +141,11 @@ function renderVisualisation(svg, data) {
 
     container.append("text")
         .attr("font-family", "sans-serif")
-        .attr("dx", xMap)
-        .attr("dy", yMap)
+        .attr("y", "20")
+        .attr("dx", "30")
         .text(function(d){return d.model})
         .style("opacity", 0)
-        .style("text-anchor","middle")
-        .on("mouseover", function(d) {
-            d3.select(this)
-                .transition()
-                .duration(1000)
-                .style("opacity", "100");
-        })
-        .on("mouseout", function(d) {
-            d3.select(this)
-                .transition()
-                .duration(500)
-                .style("opacity", "0");
-        });
+        .style("font-size", "2em");
 
     // x-axis
     svg.append("g")
