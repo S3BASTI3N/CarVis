@@ -6,11 +6,13 @@
  *
  * This has been adapted to suite more data dimensions and version 4 of the d3.js framework
  */
-var symbolScale = 15;
+
+var caption = "The size of the shapes represents the relative weight of the various cars. Mouse over a shape to see the exact model."
+var symbolScale = 10;
 
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 1500 - margin.left - margin.right,
-    height = 1000 - margin.top - margin.bottom;
+    height = 800 - margin.top - margin.bottom;
 
 // setup x
 var xValue = function(d) { return d.year;}, // data -> value
@@ -78,7 +80,7 @@ function appendSvg()
     // add the graph canvas to the body of the webpage
     var svg = d3.select("body").append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("height", height + margin.top + margin.bottom + 50)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -127,7 +129,7 @@ function renderVisualisation(svg, data) {
         .attr("x", function(d) { return xScale(xValue(d)) - d.weight / maxWeight * symbolScale;})
         .attr("y", function(d) { return yScale(yValue(d)) - d.weight / maxWeight * symbolScale;})
         .style("fill", function(d) { return color(quantize(cValue(d)));})
-        .style("opacity", function(d) { return d.origin === "US" ? 1 : 0 });
+        .style("opacity", function(d) { return d.origin === "US" ? 1 : 0 })
 
     // Japan symbol
     container.append("polygon")
@@ -180,7 +182,14 @@ function renderVisualisation(svg, data) {
         .text("MPG")
         .attr("font-family", "sans-serif");
 
-
+    // Caption
+    svg.append("text")
+        .attr("class", "caption")
+        .attr("x", 0)
+        .attr("dy", height + 40)
+        .text(caption)
+        .attr("font-family", "Roboto");
+    
     // draw legend
     var legend = svg.selectAll(".legend")
         .data(quantize.ticks(5))
@@ -201,6 +210,6 @@ function renderVisualisation(svg, data) {
         .attr("y", 9)
         .attr("dy", ".35em")
         .style("text-anchor", "end")
-        .text(function(d) { return d;})
+        .text(function(d) { return d + "-" + (d+49) + " HP";})
         .attr("font-family", "sans-serif");
 }
