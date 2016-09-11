@@ -35,13 +35,6 @@ var quantize = d3.scaleQuantize()
 
 var color = d3.scaleSequential(d3.interpolateViridis);
 
-// add the graph canvas to the body of the webpage
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
 function loadVisualisation()
 {
     readDataFile("cars.csv");
