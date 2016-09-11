@@ -29,7 +29,7 @@ var cValue = function(d) { return d.horsepower; };
 //var color = d3.scaleOrdinal(d3.schemeCategory10);
 var quantize = d3.scaleQuantize()
     .domain([0, 230])
-    .range([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]); // possibly adjust range to a smaller one
+    .range([0, 0.2, 0.4, 0.6, 0.8, 1]); // possibly adjust range to a smaller one
 
 var color = d3.scaleSequential(d3.interpolateViridis);
 
@@ -190,9 +190,10 @@ function renderVisualisation(svg, data) {
         .text("MPG")
         .attr("font-family", "sans-serif");
 
+    console.log(quantize.ticks());
     // draw legend
     var legend = svg.selectAll(".legend")
-        .data(quantize.ticks())
+        .data(quantize.ticks(5))
         .enter().append("g")
         .attr("class", "legend")
         .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
