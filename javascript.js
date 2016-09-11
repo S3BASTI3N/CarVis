@@ -143,7 +143,7 @@ function renderVisualisation(svg, data) {
         .attr("font-family", "sans-serif")
         .attr("y", "20")
         .attr("dx", "30")
-        .text(function(d){return d.model})
+        .text(function(d){return "Model (Cylinders): " + d.model + " ("+d.cylinders+")"})
         .style("opacity", 0)
         .style("font-size", "2em");
 
