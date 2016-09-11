@@ -6,11 +6,11 @@
  *
  * This has been adapted to suite more data dimensions and version 4 of the d3.js framework
  */
-
+var symbolScale = 15;
 
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = 1500 - margin.left - margin.right,
+    height = 1000 - margin.top - margin.bottom;
 
 // setup x
 var xValue = function(d) { return d.year;}, // data -> value
@@ -95,14 +95,37 @@ function renderVisualisation(svg, data) {
 
     var container = svg.selectAll(".dot")
         .data(data)
-        .enter().append("g")
+        .enter().append("g");
 
+    // Europe
     container.append("circle")
         .attr("class", "dot")
-        .attr("r", function(d) { return d.weight / maxWeight * 7;})
+        .attr("r", function(d) { return d.weight / maxWeight * symbolScale;})
         .attr("cx", xMap)
         .attr("cy", yMap)
         .style("fill", function(d) { return color(quantize(cValue(d)));})
+        .style("opacity", function(d) { return d.origin === "Europe" ? 1 : 0 });
+
+
+    // US
+    container.append("rect")
+        .attr("class", "rect")
+        .attr("width", function(d) { return d.weight / maxWeight * 2 * symbolScale;})
+        .attr("height", function(d) { return d.weight / maxWeight * 2 * symbolScale;})
+        .attr("x", function(d) { return xScale(xValue(d)) - d.weight / maxWeight * symbolScale;})
+        .attr("y", function(d) { return yScale(yValue(d)) - d.weight / maxWeight * symbolScale;})
+        .style("fill", function(d) { return color(quantize(cValue(d)));})
+        .style("opacity", function(d) { return d.origin === "US" ? 1 : 0 });
+
+    // Japan
+    container.append("polygon")
+        .attr("class", "polygon")
+        .attr("points", "1,1 0,-1 -1,1")
+        .attr("transform", function(d) {var x = xScale(xValue(d)), y = yScale(yValue(d));
+                                            return "translate("+x+","+y+")" +
+                                                    "scale(" + d.weight / maxWeight * symbolScale +")"})
+        .style("fill", function(d) { return color(quantize(cValue(d)));})
+        .style("opacity", function(d) { return d.origin === "Japan" ? 1 : 0 });
 
     container.append("text")
         .attr("font-family", "sans-serif")
