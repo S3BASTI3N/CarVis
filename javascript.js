@@ -7,7 +7,7 @@
  * This has been adapted to suite more data dimensions and version 4 of the d3.js framework
  */
 
-var caption = "The size of the shapes represents the relative weight of the various cars. Mouse over a shape to see the exact model."
+var caption = "The size of the shapes represent the relative weight of the various cars. Mouse over a shape to see the exact model and the amoutn of cylinders."
 var symbolScale = 10;
 
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
