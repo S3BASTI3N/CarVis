@@ -187,7 +187,7 @@ function renderVisualisation(svg, data) {
         .data(quantize.ticks(5))
         .enter().append("g")
         .attr("class", "legend")
-        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+        .attr("transform", function(d, i) { return "translate(15," + i * 20 + ")"; });
 
     // draw legend colored rectangles
     legend.append("rect")
