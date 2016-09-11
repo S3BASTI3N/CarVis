@@ -85,13 +85,15 @@ function renderVisualisation(svg, data) {
     xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
     yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
 
+    var maxWeight = d3.max(data,function(d) {return d.weight;})
+
     var container = svg.selectAll(".dot")
         .data(data)
         .enter().append("g")
 
     container.append("circle")
         .attr("class", "dot")
-        .attr("r", 3.5)
+        .attr("r", function(d) { return d.weight / maxWeight * 7;})
         .attr("cx", xMap)
         .attr("cy", yMap)
         .style("fill", function(d) { return color(cValue(d));})
